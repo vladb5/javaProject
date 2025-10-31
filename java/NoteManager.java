@@ -17,19 +17,14 @@ import java.lang.reflect.Method;
 public class NoteManager {
 
     private List<Note> notesList = new ArrayList<>();
-    // Можно использовать Map, если текст заметок гарантированно уникален,
-    // или если хотите быстрый поиск по тексту.
-    // Для простоты примера, в основном используем List.
-    // private Map<String, Note> notesMap = new HashMap<>();
 
     private static final String FILENAME = "notes.txt";
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public static void main(String[] args) {
         NoteManager manager = new NoteManager();
-        manager.loadNotesFromFile(); // Автозагрузка при старте
+        manager.loadNotesFromFile(); 
 
-        // Проверка аннотации
         try {
             Method saveMethod = NoteManager.class.getMethod("saveToFile");
             if (saveMethod.isAnnotationPresent(Task.class)) {
@@ -42,7 +37,6 @@ public class NoteManager {
         manager.runMenu();
     }
 
-    // Метод для сохранения в файл, помеченный аннотацией
     @Task("Сохранение заметок в файл")
     public void saveToFile() {
         Path path = Paths.get(FILENAME);
@@ -58,7 +52,6 @@ public class NoteManager {
         }
     }
 
-    // Метод для загрузки из файла
     public void loadNotesFromFile() {
         Path path = Paths.get(FILENAME);
         if (Files.exists(path)) {
@@ -85,7 +78,6 @@ public class NoteManager {
         }
     }
 
-    // Основное меню
     public void runMenu() {
         Scanner scanner = new Scanner(System.in);
         int choice;
@@ -126,11 +118,10 @@ public class NoteManager {
                 default:
                     System.out.println("Некорректный выбор. Пожалуйста, попробуйте снова.");
             }
-            System.out.println(); // Пустая строка для лучшей читаемости
+            System.out.println(); 
         }
     }
 
-    // Печать меню
     private void printMenu() {
         System.out.println("\n--- Менеджер заметок ---");
         System.out.println("1. Добавить заметку");
@@ -142,21 +133,18 @@ public class NoteManager {
         System.out.println("0. Выход");
     }
 
-    // Добавление заметки
     private void addNote(Scanner scanner) {
         System.out.print("Введите текст заметки: ");
         String text = scanner.nextLine();
         if (text != null && !text.trim().isEmpty()) {
             Note newNote = new Note(text.trim());
             notesList.add(newNote);
-            // Если используете Map: notesMap.put(text.trim(), newNote);
             System.out.println("Заметка добавлена!");
         } else {
             System.out.println("Текст заметки не может быть пустым.");
         }
     }
 
-    // Показ всех заметок
     private void showAllNotes() {
         if (notesList.isEmpty()) {
             System.out.println("Список заметок пуст.");
@@ -164,22 +152,11 @@ public class NoteManager {
         }
 
         System.out.println("\n--- Все заметки ---");
-        // Использование Stream API и Lambda-выражений для фильтрации (пример)
-        // Например, показать только заметки за последний час
-        /*
-        System.out.println("Заметки за последний час:");
-        notesList.stream()
-                .filter(n -> n.getCreatedAt().isAfter(LocalDateTime.now().minusHours(1)))
-                .forEach(n -> System.out.println((notesList.indexOf(n) + 1) + ". " + n));
-        */
-
-        // Показать все заметки с нумерацией
         for (int i = 0; i < notesList.size(); i++) {
             System.out.println((i + 1) + ". " + notesList.get(i));
         }
     }
 
-    // Удаление заметки по номеру
     private void deleteNote(Scanner scanner) {
         if (notesList.isEmpty()) {
             System.out.println("Список заметок пуст. Нечего удалять.");
@@ -190,7 +167,6 @@ public class NoteManager {
         try {
             int number = Integer.parseInt(scanner.nextLine());
             if (number > 0 && number <= notesList.size()) {
-                // Использование Анонимного класса для выполнения действия после удаления
                 Runnable onDeleteAction = new Runnable() {
                     @Override
                     public void run() {
@@ -198,10 +174,8 @@ public class NoteManager {
                     }
                 };
 
-                Note removedNote = notesList.remove(number - 1); // Удаление из List
-                // Если используете Map: notesMap.remove(removedNote.getText());
-
-                onDeleteAction.run(); // Выполнение действия после удаления
+                Note removedNote = notesList.remove(number - 1); 
+                onDeleteAction.run();
 
             } else {
                 System.out.println("Некорректный номер заметки.");
@@ -211,20 +185,18 @@ public class NoteManager {
         }
     }
 
-    // Многопоточность - запуск напоминания
     private void runReminder() {
         System.out.println("Запуск напоминания...");
 
-        // Использование Lambda-выражения для создания потока
         new Thread(() -> {
             System.out.println("Напоминание: у вас " + notesList.size() + " заметок!");
             try {
-                Thread.sleep(2000); // Пауза 2 секунды
+                Thread.sleep(2000); 
             } catch (InterruptedException e) {
-                Thread.currentThread().interrupt(); // Восстанавливаем флаг прерывания
+                Thread.currentThread().interrupt(); 
                 System.err.println("Поток напоминания был прерван.");
             }
             System.out.println("Проверка напоминаний завершена.");
-        }).start(); // Запуск нового потока
+        }).start(); 
     }
 }

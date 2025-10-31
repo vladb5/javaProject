@@ -6,19 +6,16 @@ public class Note {
     private String text;
     private LocalDateTime createdAt;
 
-    // Конструктор
     public Note(String text) {
         this.text = text;
         this.createdAt = LocalDateTime.now();
     }
 
-    // Конструктор для загрузки из файла (без установки текущего времени)
     public Note(String text, LocalDateTime createdAt) {
         this.text = text;
         this.createdAt = createdAt;
     }
 
-    // Геттеры
     public String getText() {
         return text;
     }
@@ -27,14 +24,12 @@ public class Note {
         return createdAt;
     }
 
-    // Для удобного вывода
     @Override
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         return text + " | " + createdAt.format(formatter);
     }
 
-    // Для использования в HashMap, если ключ - текст
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -3,8 +3,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Retention(RetentionPolicy.RUNTIME) // Аннотация будет доступна во время выполнения
-@Target(ElementType.METHOD)       // Аннотация может быть применена к методам
+@Retention(RetentionPolicy.RUNTIME) 
+@Target(ElementType.METHOD)    
 public @interface Task {
-    String value(); // Метаданные аннотации
+    String value();
 }
